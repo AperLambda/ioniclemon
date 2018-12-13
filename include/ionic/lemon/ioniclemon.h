@@ -10,8 +10,6 @@
 #ifndef IONICLEMON_LIBRARY_H
 #define IONICLEMON_LIBRARY_H
 
-#include <string>
-
 #define IONICLEMON_VERSION_MAJOR 0
 #define IONICLEMON_VERSION_MINOR 1
 #define IONICLEMON_VERSION_PATCH 0
@@ -29,7 +27,9 @@ namespace ioniclemon
 	class ILContext
 	{
 	private:
+		bool _running;
 		std::shared_ptr<internal::ILContextImpl> _impl;
+		std::vector<Window> windows;
 
 	public:
 		explicit ILContext(std::shared_ptr<internal::ILContextImpl> implementation);
@@ -38,8 +38,25 @@ namespace ioniclemon
 
 		ILContext(ILContext &&other) noexcept;
 
+		~ILContext();
+
+		/*!
+		 * Shutdowns the library context.
+		 */
 		void shutdown();
 
+		/*!
+		 * Updates and polls events.
+		 */
+		void update();
+
+		/*!
+		 * Creates a new window.
+		 * @param id The identifier of the window.
+		 * @param title The title of the window.
+		 * @param size The size of the window.
+		 * @return The window if success, else nullopt.
+		 */
 		std::optional<Window> create_window(const lambdacommon::ResourceName &id, const std::string &title,
 											const lambdacommon::Size2D_u32 &size);
 	};

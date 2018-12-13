@@ -12,7 +12,7 @@
  */
 
 #include "../../include/ionic/lemon/window.h"
-#include "window_null.h"
+#include "../internal/window/window_null.h"
 
 namespace ioniclemon
 {
@@ -30,61 +30,97 @@ namespace ioniclemon
 		return _identifier;
 	}
 
-	void Window::set_identifier(const lambdacommon::ResourceName &identifier)
-	{
-		Window::_identifier = identifier;
-	}
-
 	std::string Window::get_title() const
 	{
+		if (!_impl->exists())
+			return "";
 		return _impl->get_title();
 	}
 
 	void Window::set_title(const std::string &title)
 	{
-		_impl->set_title(title);
+		if (_impl->exists())
+			_impl->set_title(title);
 	}
 
 	lambdacommon::Size2D_u32 Window::get_size() const
 	{
+		if (!_impl->exists())
+			return {0, 0};
 		return _impl->get_size();
 	}
 
 	void Window::set_size(const lambdacommon::Size2D_u32 &size)
 	{
-		_impl->set_size(size);
+		if (_impl->exists())
+			_impl->set_size(size);
+	}
+
+	lambdacommon::Size2D_u32 Window::get_framebuffer_size() const
+	{
+		if (!_impl->exists())
+			return {0, 0};
+		return _impl->get_framebuffer_size();
 	}
 
 	bool Window::is_visible() const
 	{
+		if (!_impl->exists())
+			return false;
 		return _impl->is_visible();
 	}
 
 	void Window::set_visible(bool visible)
 	{
-		_impl->set_visible(visible);
+		if (visible) show(); else hide();
 	}
 
 	void Window::show()
 	{
-		_impl->show();
+		if (_impl->exists())
+			_impl->show();
 	}
 
 	void Window::hide()
 	{
-		_impl->hide();
+		if (_impl->exists())
+			_impl->hide();
+	}
+
+	bool Window::should_close() const
+	{
+		return _impl->should_close();
+	}
+
+	void Window::set_should_close(bool should_close)
+	{
+		_impl->set_should_close(should_close);
+	}
+
+	void Window::focus()
+	{
+
+	}
+
+	void Window::request_attention() const
+	{
+		if (_impl->exists())
+			_impl->request_attention();
 	}
 
 	void Window::destroy()
 	{
-		_impl->destroy();
+		if (_impl->exists())
+			_impl->destroy();
 	}
 
-	namespace window
+	bool Window::operator==(const Window &other) const
 	{
-		std::optional<Window> create(const std::string &title, const lambdacommon::Size2D_u32 &size)
-		{
-			return {Window({"ioniclemon", title}, std::make_shared<internal::WindowNullImpl>(title, size))};
-		}
+		return _identifier == other._identifier;
+	}
+
+	bool Window::operator<(const Window &other) const
+	{
+		return _identifier < other._identifier;
 	}
 }

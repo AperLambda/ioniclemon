@@ -22,6 +22,8 @@ namespace ioniclemon
 		class WindowImpl;
 	}
 
+	using namespace std::rel_ops;
+
 	/*!
 	 * Represents a window.
 	 */
@@ -45,12 +47,6 @@ namespace ioniclemon
 		const lambdacommon::ResourceName &get_identifier() const;
 
 		/*!
-		 * Sets the identifier of the window.
-		 * @param identifier The identifier of the window.
-		 */
-		void set_identifier(const lambdacommon::ResourceName &identifier);
-
-		/*!
 		 * Gets the title of the window.
 		 * @return The title of the window.
 		 */
@@ -63,7 +59,7 @@ namespace ioniclemon
 		void set_title(const std::string &title);
 
 		/*!
-		 * Sets the size of the window.
+		 * Gets the size of the window.
 		 * @return The size of the window.
 		 */
 		lambdacommon::Size2D_u32 get_size() const;
@@ -74,21 +70,62 @@ namespace ioniclemon
 		 */
 		void set_size(const lambdacommon::Size2D_u32 &size);
 
+		/*!
+		 * Gets the framebuffer size of the window.
+		 * @return The framebuffer size of the window.
+		 */
+		lambdacommon::Size2D_u32 get_framebuffer_size() const;
+
+		/*!
+		 * Checks if the window is visible.
+		 * @return True if the window is visible, else false.
+		 */
 		bool is_visible() const;
 
 		void set_visible(bool visible);
 
+		/*!
+		 * Shows the window.
+		 */
 		void show();
 
+		/*!
+		 * Hides the window.
+		 */
 		void hide();
 
-		void destroy();
-	};
+		bool is_decorated() const;
 
-	namespace window
-	{
-		std::optional<Window> create(const std::string &title, const lambdacommon::Size2D_u32 &size);
-	}
+		void set_decorated(bool decorated);
+
+		/*!
+		 * Checks whether the window should close.
+		 * @return True if the window should close, else false.
+		 */
+		bool should_close() const;
+
+		/*!
+		 * Sets whether the window should close or not.
+		 * @param should_close True if the window should close, else false.
+		 */
+		void set_should_close(bool should_close);
+
+		void focus();
+
+		/*!
+		 * Requests the attention from the user.
+		 */
+		void request_attention() const;
+
+		/*!
+		 * Destroys the window.
+		 */
+		void destroy();
+
+		bool operator==(const Window &other) const;
+
+		bool operator<(const Window &other) const;
+	};
 }
 
 #endif //IONICLEMON_WINDOW_H

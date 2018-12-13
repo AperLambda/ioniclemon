@@ -8,7 +8,7 @@
  */
 
 #include "context_x11.h"
-#include "../window/window_x11.h"
+#include "window/window_x11.h"
 
 namespace ioniclemon::internal
 {

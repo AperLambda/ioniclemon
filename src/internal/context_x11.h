@@ -36,6 +36,8 @@ namespace ioniclemon::internal
 
 		void shutdown() override;
 
+		void update() override;
+
 		std::optional<Window> create_window(const lambdacommon::ResourceName &id, const std::string &title,
 											const lambdacommon::Size2D_u32 &size) override;
 	};

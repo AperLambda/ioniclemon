@@ -24,14 +24,14 @@ namespace ioniclemon::internal
 		lambdacommon::Size2D_u32 _size;
 
 	public:
-		WindowNullImpl(std::string title, lambdacommon::Size2D_u32 size) : _title(std::move(title)), _size(
-				std::move(size))
-		{}
+		WindowNullImpl(std::string title, lambdacommon::Size2D_u32 size) : _title(std::move(title)), _size(std::move(size))
+		{
+			_exists = true;
+		}
 
 		WindowNullImpl(const WindowNullImpl &other) = default;
 
-		WindowNullImpl(WindowNullImpl &&other) noexcept : _title(std::move(other._title)),
-														  _size(std::move(other._size))
+		WindowNullImpl(WindowNullImpl &&other) noexcept : _title(std::move(other._title)), _size(std::move(other._size))
 		{}
 
 		std::string get_title() const override
@@ -54,6 +54,11 @@ namespace ioniclemon::internal
 			_size = size;
 		}
 
+		lambdacommon::Size2D_u32 get_framebuffer_size() const override
+		{
+			return get_size();
+		}
+
 		bool is_visible() const override
 		{
 			return false;
@@ -68,7 +73,10 @@ namespace ioniclemon::internal
 		void hide() override
 		{}
 
-		void destroy() override
+		void request_attention() const override
+		{}
+
+		void __internal_destroy() override
 		{}
 	};
 }

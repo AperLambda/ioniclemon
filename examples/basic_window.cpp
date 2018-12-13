@@ -10,19 +10,29 @@
 #include <ionic/lemon/ioniclemon.h>
 #include <lambdacommon/system/terminal.h>
 
+using namespace lambdacommon::lstring::stream;
+
 int main()
 {
 	lambdacommon::terminal::setup();
 	auto context = ioniclemon::init();
-	if (!context) return EXIT_FAILURE;
+	if (!context) {
+		std::cerr << "Context creation failed." << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	auto window = context->create_window({"bw:basic_window"}, "Basic window", {800, 600});
 	if (!window)
 		return EXIT_FAILURE;
 
 	window->show();
 
-	while (1) {
-		//std::cout << "Size of window: " << window->get_size().to_string() << std::endl;
+	window->request_attention();
+
+	while (!window->should_close()) {
+		context->update();
+
+		std::cout << "Current window size: " << window->get_framebuffer_size() << std::endl;
 	}
 
 	return EXIT_SUCCESS;
