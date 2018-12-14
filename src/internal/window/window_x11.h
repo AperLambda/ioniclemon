@@ -12,6 +12,12 @@
 
 #include "window_impl.h"
 #include "../context_x11.h"
+#include <cstring>
+
+// Action for EWMH client messages
+#define _NET_WM_STATE_REMOVE 0
+#define _NET_WM_STATE_ADD    1
+#define _NET_WM_STATE_TOGGLE 2
 
 namespace ioniclemon::internal
 {
@@ -22,6 +28,7 @@ namespace ioniclemon::internal
 		::Window _handle;
 		XVisualInfo *_vi;
 		GLXContext _glx_context;
+		long a;
 
 	public:
 		WindowX11Impl(const ILContextX11Impl &context, ::Window handle, XVisualInfo *vi) : context(context), _handle(handle), _vi(vi)
