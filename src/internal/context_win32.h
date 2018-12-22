@@ -21,14 +21,14 @@ typedef LONG (WINAPI *RtlVerifyVersionInfo_t)(OSVERSIONINFOEXW *, ULONG, ULONGLO
 
 namespace ioniclemon::internal
 {
-	class ILContextWin32Impl : public ILContextImpl
+	class ILContextGLFWImpl : public ILContextImpl
 	{
 	private:
 		HMODULE _ntdll;
 		RtlVerifyVersionInfo_t RtlVerifyVersionInfo_;
 
 	public:
-		ILContextWin32Impl(HMODULE _ntdll, RtlVerifyVersionInfo_t RtlVerifyVersionInfo);
+		ILContextGLFWImpl(HMODULE _ntdll, RtlVerifyVersionInfo_t RtlVerifyVersionInfo);
 
 		void shutdown() override;
 
@@ -40,7 +40,7 @@ namespace ioniclemon::internal
 		bool __is_windows10_anniversary_update_or_greater() const;
 	};
 
-	std::shared_ptr<ILContextWin32Impl> init_context();
+	std::shared_ptr<ILContextGLFWImpl> init_context();
 }
 
 #endif //IONICLEMON_CONTEXT_WIN32_H

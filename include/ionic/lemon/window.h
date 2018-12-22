@@ -117,6 +117,11 @@ namespace ioniclemon
 		 */
 		void request_attention() const;
 
+		/*! @brief Swaps the front and back buffers of the window.
+		 *
+		 */
+		void swap_buffers();
+
 		/*!
 		 * Destroys the window.
 		 */

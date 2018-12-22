@@ -108,6 +108,12 @@ namespace ioniclemon
 			_impl->request_attention();
 	}
 
+	void Window::swap_buffers()
+	{
+		if (_impl->exists())
+			_impl->swap_buffers();
+	}
+
 	void Window::destroy()
 	{
 		if (_impl->exists())

@@ -47,7 +47,7 @@ namespace ioniclemon::internal
 		return style;
 	}
 
-	static lambdacommon::Size2D_i32 get_full_window_size(const ILContextWin32Impl &context, DWORD style, DWORD ex_style, int client_width, int client_height, UINT dpi)
+	static lambdacommon::Size2D_i32 get_full_window_size(const ILContextGLFWImpl &context, DWORD style, DWORD ex_style, int client_width, int client_height, UINT dpi)
 	{
 		RECT rect{0, 0, client_width, client_height};
 
@@ -62,11 +62,11 @@ namespace ioniclemon::internal
 	class WindowWin32Impl : public WindowImpl
 	{
 	private:
-		const ILContextWin32Impl &context;
+		const ILContextGLFWImpl &context;
 		HWND _handle;
 
 	public:
-		explicit WindowWin32Impl(const ILContextWin32Impl &context, HWND handle) : context(context), _handle(handle)
+		explicit WindowWin32Impl(const ILContextGLFWImpl &context, HWND handle) : context(context), _handle(handle)
 		{
 			_exists = true;
 			SetPropW(_handle, L"ioniclemon", this);
@@ -102,11 +102,6 @@ namespace ioniclemon::internal
 		bool is_visible() const override
 		{
 			return static_cast<bool>(IsWindowVisible(_handle));
-		}
-
-		void set_visible(bool visible) override
-		{
-			if (visible) show(); else hide();
 		}
 
 		void show() override

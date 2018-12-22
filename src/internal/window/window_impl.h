@@ -44,13 +44,11 @@ namespace ioniclemon::internal
 
 		virtual bool is_visible() const = 0;
 
-		virtual void set_visible(bool visible) = 0;
-
 		virtual void show() = 0;
 
 		virtual void hide() = 0;
 
-		bool should_close()
+		virtual bool should_close()
 		{
 			return _should_close;
 		}
@@ -61,6 +59,8 @@ namespace ioniclemon::internal
 		}
 
 		virtual void request_attention() const = 0;
+
+		virtual void swap_buffers() = 0;
 
 		void destroy()
 		{

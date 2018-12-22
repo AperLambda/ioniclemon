@@ -8,7 +8,8 @@
  */
 
 #include <ionic/lemon/ioniclemon.h>
-#include <lambdacommon/system/terminal.h>
+#include <lambdacommon/system/system.h>
+#include <GL/glew.h>
 
 using namespace lambdacommon::lstring::stream;
 
@@ -24,15 +25,19 @@ int main()
 	auto window = context->create_window({"bw:basic_window"}, "Basic window", {800, 600});
 	if (!window)
 		return EXIT_FAILURE;
+	if (!glewInit())
+		return EXIT_FAILURE;
 
 	window->show();
 
 	window->request_attention();
 
 	while (!window->should_close()) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		window->swap_buffers();
 		context->update();
 
-		std::cout << "Current window size: " << window->get_framebuffer_size() << std::endl;
+		//std::cout << "Current window size: " << window->get_framebuffer_size() << std::endl;
 	}
 
 	return EXIT_SUCCESS;

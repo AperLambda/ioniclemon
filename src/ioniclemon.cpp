@@ -10,7 +10,11 @@
 #include "../include/ionic/lemon/ioniclemon.h"
 #include "context.h"
 
-#ifdef LAMBDA_WINDOWS
+#ifdef IONICLEMON_USE_GLFW
+
+#  include "internal/context_glfw.h"
+
+#elif defined(LAMBDA_WINDOWS)
 
 #  include "internal/context_win32.h"
 

@@ -89,11 +89,6 @@ namespace ioniclemon::internal
 			return wa.map_state == IsViewable;
 		}
 
-		void set_visible(bool visible) override
-		{
-			if (visible) show(); else hide();
-		}
-
 		void show() override
 		{
 			XMapWindow(context.get_display(), _handle);

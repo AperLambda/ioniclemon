@@ -14,10 +14,10 @@
 
 namespace ioniclemon::internal
 {
-	ILContextWin32Impl::ILContextWin32Impl(const HMODULE ntdll, RtlVerifyVersionInfo_t RtlVerifyVersionInfo) : _ntdll(ntdll), RtlVerifyVersionInfo_(RtlVerifyVersionInfo)
+	ILContextGLFWImpl::ILContextGLFWImpl(const HMODULE ntdll, RtlVerifyVersionInfo_t RtlVerifyVersionInfo) : _ntdll(ntdll), RtlVerifyVersionInfo_(RtlVerifyVersionInfo)
 	{}
 
-	void ILContextWin32Impl::shutdown()
+	void ILContextGLFWImpl::shutdown()
 	{
 		UnregisterClassW(IONICLEMON_CLASS, GetModuleHandleW(nullptr));
 
@@ -25,7 +25,7 @@ namespace ioniclemon::internal
 			FreeLibrary(_ntdll);
 	}
 
-	void ILContextWin32Impl::update()
+	void ILContextGLFWImpl::update()
 	{
 		MSG msg;
 
@@ -35,13 +35,12 @@ namespace ioniclemon::internal
 		}
 	}
 
-	std::optional<Window>
-	ILContextWin32Impl::create_window(const lambdacommon::ResourceName &id, const std::string &title, const lambdacommon::Size2D_u32 &size)
+	std::optional<Window> ILContextGLFWImpl::create_window(const lambdacommon::ResourceName &id, const std::string &title, const lambdacommon::Size2D_u32 &size)
 	{
 		lambdacommon::Size2D_i32 full_size{0, 0};
 		auto wide_title = lambdacommon::lstring::convert_string_to_wstring(title);
 		auto style = get_window_style(false, true, true);
-		auto ex_style = get_window_ex_style(false, true);
+		auto ex_style = get_window_ex_style(false, false);
 
 		full_size = get_full_window_size(*this, style, ex_style, size.get_width(), size.get_height(), USER_DEFAULT_SCREEN_DPI);
 
@@ -62,10 +61,10 @@ namespace ioniclemon::internal
 		return Window(id, std::make_shared<WindowWin32Impl>(*this, handle));
 	}
 
-	bool ILContextWin32Impl::__is_windows10_anniversary_update_or_greater() const
+	bool ILContextGLFWImpl::__is_windows10_anniversary_update_or_greater() const
 	{
 		OSVERSIONINFOEXW osvi = {sizeof(osvi), 10, 0, 14393};
-		auto mask = VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER;
+		DWORD mask = VER_MAJORVERSION | VER_MINORVERSION | VER_BUILDNUMBER;
 		ULONGLONG cond = VerSetConditionMask(0, VER_MAJORVERSION, VER_GREATER_EQUAL);
 		cond = VerSetConditionMask(cond, VER_MINORVERSION, VER_GREATER_EQUAL);
 		cond = VerSetConditionMask(cond, VER_BUILDNUMBER, VER_GREATER_EQUAL);
@@ -88,7 +87,7 @@ namespace ioniclemon::internal
 		return DefWindowProc(hwnd, u_msg, wparam, lparam);
 	}
 
-	std::shared_ptr<ILContextWin32Impl> init_context()
+	std::shared_ptr<ILContextGLFWImpl> init_context()
 	{
 		// Register class.
 		WNDCLASSEXW wc = {};
@@ -106,6 +105,6 @@ namespace ioniclemon::internal
 		if (ntdll)
 			RtlVerifyVersionInfo_ = reinterpret_cast<RtlVerifyVersionInfo_t>(GetProcAddress(ntdll, "RtlVerifyVersionInfo"));
 
-		return std::make_shared<ILContextWin32Impl>(ntdll, RtlVerifyVersionInfo_);
+		return std::make_shared<ILContextGLFWImpl>(ntdll, RtlVerifyVersionInfo_);
 	}
 }

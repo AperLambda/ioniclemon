@@ -64,9 +64,6 @@ namespace ioniclemon::internal
 			return false;
 		}
 
-		void set_visible(bool visible) override
-		{}
-
 		void show() override
 		{}
 
